@@ -94,74 +94,11 @@ exports.findId = (req, res) => {
         })
 }
 
-//retrive all contact
-// exports.find = (req, res) => {
-//     ContactDb.find()
-//         .then(contact => {
-//             res.send(contact)
-//         })
-//         .catch(err => {
-//             res.status(500).send({
-//                 message: err.message || "error occured while retriving data"
-//             });
-//         });
-// }
-
-// exports.find = async (req, res) => {
-//     try {
-//         let { search } = req.query;
-//         let page = req.query.page || 1;
-//         let size = req.query.size || 5;
-//         const limit = parseInt(size);
-//         const skip = (page - 1) * size;
-
-//         const pipeline = [];
-
-//         if (search) {
-//             pipeline.push({
-//                 $match: {
-//                     $or: [
-//                         { firstName: { $regex: search, $options: 'i' } },
-//                         { lastName: { $regex: search, $options: 'i' } },
-//                         { email: { $regex: search, $options: 'i' } },
-//                         { phone: { $regex: search, $options: 'i' } },
-//                     ],
-//                 },
-//             });
-//         }
-
-//         pipeline.push(
-//             { $skip: skip },
-//             { $limit: limit },
-//         );
-
-//         const countStage = { $count: 'totalCount' };
-
-//         const facetStage = {
-//             $facet: {
-//                 contacts: pipeline.slice(0), // Copy the pipeline to avoid recursion
-//                 contactsCount: [countStage],
-//             },
-//         };
-
-//         pipeline.push(facetStage);
-
-//         const result = await ContactDb.aggregate(pipeline).exec();
-
-//         const { contacts, contactsCount } = result[0];
-
-//         res.status(200).json({ contacts, contactsCount });
-//     } catch (error) {
-//         console.error(error);
-//         res.status(500).json({ error: 'Internal server error' });
-//     }
-// };
-
 exports.find = async (req, res) => {
     try {
         let { search } = req.query;
         let page = req.query.page || 1;
-        let size = req.query.size || 5;
+        let size = req.query.size || 3;
         const limit = parseInt(size);
         const skip = (page - 1) * size;
 
@@ -198,6 +135,7 @@ exports.find = async (req, res) => {
         const { contacts, contactsCount } = result[0];
 
         res.status(200).json({ contacts, contactsCount });
+        
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Internal server error' });
